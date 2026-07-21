@@ -262,8 +262,8 @@ static void vmpressure_work_fn(struct work_struct *work)
 	spin_unlock(&vmpr->sr_lock);
 
 	pressure = vmpressure_calc_pressure(scanned, reclaimed);
-	vmpr->pressure = pressure;
 	level = vmpressure_level(pressure);
+	vmpr->pressure = pressure;
 
 	do {
 		if (vmpressure_event(vmpr, level, ancestor, signalled))
