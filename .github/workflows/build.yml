@@ -65,13 +65,13 @@ jobs:
           sudo dpkg -i libtinfo5_6.3-2_amd64.deb
           sudo apt-get install -f -y
 
-      - name: "Clone Missing Toolchain & KernelSU-Next"
+      - name: "Clone Toolchain & KernelSU-Next"
         run: |
-          # 1. Create the exact path expected by your build script for the aarch64 toolchain
+          # 1. Create directory and clone the correct Samsung-compatible GCC toolchain repository
           mkdir -p toolchain/gcc-cfp/gcc-cfp-single
-          git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
+          git clone --depth=1 https://github.com/ravindu644/gcc-cfp-jopp-only.git toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
 
-          # 2. Clone KernelSU-Next directly into drivers/kernelsu using the correct main branch/setup script
+          # 2. Setup KernelSU-Next via official setup script
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s main
 
       - name: "Setting permission"
