@@ -15,23 +15,60 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential bc bison flex make git curl wget cpio zip unzip rsync kmod pv lz4 xz-utils \
-            zlib1g-dev libssl-dev libelf-dev libncurses-dev libtool automake autoconf pkg-config uuid-dev \
-            liblz4-dev openssl python3 python-is-python3 python3-pip p7zip-full gcc g++ clang lld \
-            erofs-utils f2fs-tools fuse2fs fuse3 libfuse3-dev attr device-tree-compiler android-sdk-libsparse-utils openjdk-17-jdk
+            build-essential \
+            bc \
+            bison \
+            flex \
+            make \
+            git \
+            curl \
+            wget \
+            cpio \
+            zip \
+            unzip \
+            rsync \
+            kmod \
+            pv \
+            lz4 \
+            xz-utils \
+            zlib1g-dev \
+            libssl-dev \
+            libelf-dev \
+            libncurses-dev \
+            libtool \
+            automake \
+            autoconf \
+            pkg-config \
+            uuid-dev \
+            liblz4-dev \
+            openssl \
+            python3 \
+            python-is-python3 \
+            python3-pip \
+            p7zip-full \
+            gcc \
+            g++ \
+            clang \
+            lld \
+            erofs-utils \
+            f2fs-tools \
+            fuse2fs \
+            fuse3 \
+            libfuse3-dev \
+            attr \
+            device-tree-compiler \
+            android-sdk-libsparse-utils \
+            openjdk-17-jdk
 
+          # Install legacy libtinfo5 required by older toolchains
           wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2_amd64.deb
           sudo dpkg -i libtinfo5_6.3-2_amd64.deb
           sudo apt-get install -f -y
 
-      - name: "Clone Toolchain and KernelSU-Next"
+      - name: "Integrate KernelSU-Next"
         run: |
-          # Clone your required aarch64 toolchain (Adjust the repository/branch if you use a specific one)
-          mkdir -p toolchain/gcc-cfp/gcc-cfp-single
-          git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
-
-          # Clone KernelSU-Next into the expected drivers directory path
-          git clone --depth=1 https://github.com/KernelSU-Next/KernelSU-Next.git drivers/kernelsu
+          # Automatically setup KernelSU-Next into the kernel tree
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s next
 
       - name: "Setting permission"
         run: chmod +x build_kernel.sh
