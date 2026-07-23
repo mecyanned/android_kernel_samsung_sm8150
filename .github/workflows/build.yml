@@ -36,8 +36,8 @@ jobs:
           mkdir -p toolchain/gcc-cfp/gcc-cfp-single
           mv gcc-cfp/gcc-cfp-jopp-only/aarch64-linux-android-4.9 toolchain/gcc-cfp/gcc-cfp-single/
 
-          # 4. Setup KernelSU-Next via official setup script
-          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s main
+          # 4. Setup KernelSU-Next using the legacy branch (recommended for Android 4.9 kernels)
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy
 
       - name: "Setting permission"
         run: chmod +x build_kernel.sh
