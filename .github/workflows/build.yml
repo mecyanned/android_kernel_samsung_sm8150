@@ -71,8 +71,8 @@ jobs:
           mkdir -p toolchain/gcc-cfp/gcc-cfp-single
           git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
 
-          # 2. Clone KernelSU-Next directly into the drivers/kernelsu path to satisfy drivers/Kconfig
-          git clone --depth=1 -b next https://github.com/KernelSU-Next/KernelSU-Next.git drivers/kernelsu
+          # 2. Clone KernelSU-Next directly into drivers/kernelsu using the correct main branch/setup script
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s main
 
       - name: "Setting permission"
         run: chmod +x build_kernel.sh
