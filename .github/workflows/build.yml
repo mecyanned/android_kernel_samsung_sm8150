@@ -24,20 +24,21 @@ jobs:
           sudo dpkg -i libtinfo5_6.3-2_amd64.deb
           sudo apt-get install -f -y
 
-      - name: "Download Toolchain & Setup KernelSU-Next"
-        run: |
-          # 1. Create target toolchain directory and download the Samsung CFP GCC toolchain archive
-          mkdir -p toolchain/gcc-cfp/gcc-cfp-single
+          - name: "Download Toolchain & Setup KernelSU-Next"
+          run: |
+          # 1. Download the Samsung CFP GCC toolchain archive
           wget -O gcc-cfp.tar.gz https://github.com/ravindu644/Android-Kernel-Tutorials/releases/download/toolchains/gcc-cfp-jopp-only.tar.gz
           
-          # 2. Extract it directly into the expected path
+          # 2. Extract the archive
           tar -xvf gcc-cfp.tar.gz
-          # Adjust if the archive extracts to a folder name that needs moving, e.g.:
-          # mv gcc-cfp-jopp-only toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
 
-          # 3. Setup KernelSU-Next via official setup script
+          # 3. Move the extracted toolchain into the precise directory structure your build script expects
+          mkdir -p toolchain/gcc-cfp/gcc-cfp-single
+          mv gcc-cfp/gcc-cfp-jopp-only/aarch64-linux-android-4.9 toolchain/gcc-cfp/gcc-cfp-single/
+
+          # 4. Setup KernelSU-Next via official setup script
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s main
-
+          
       - name: "Setting permission"
         run: chmod +x build_kernel.sh
 
