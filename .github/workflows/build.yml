@@ -1,14 +1,72 @@
-- name: "Set up build environment"
+name: Samsung SM8150 a826xq Kernel Build
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: "Checkout kernel source"
+        uses: actions/checkout@v4    
+
+      - name: "Set up build environment"
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential bc bison flex libssl-dev make libncurses-dev git curl clang lld \
-            libelf-dev erofs-utils android-sdk-libsparse-utils automake autoconf libtool pkg-config fuse3 e2fsprogs pv liblz4-dev uuid-dev \
-            libfuse3-dev f2fs-tools fuse2fs attr zlib1g-dev rsync \
-            device-tree-compiler lz4 xz-utils openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full \
-            cpio zip unzip kmod openssl python3-pip
-          
-          # Fix: Fetch libtinfo5 from Ubuntu 22.04 (Jammy) pool
-          wget http://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb 
+            build-essential \
+            bc \
+            bison \
+            flex \
+            make \
+            git \
+            curl \
+            wget \
+            cpio \
+            zip \
+            unzip \
+            rsync \
+            kmod \
+            pv \
+            lz4 \
+            xz-utils \
+            zlib1g-dev \
+            libssl-dev \
+            libelf-dev \
+            libncurses-dev \
+            libtool \
+            automake \
+            autoconf \
+            pkg-config \
+            uuid-dev \
+            liblz4-dev \
+            openssl \
+            python3 \
+            python-is-python3 \
+            python3-pip \
+            p7zip-full \
+            gcc \
+            g++ \
+            clang \
+            lld \
+            erofs-utils \
+            f2fs-tools \
+            fuse2fs \
+            fuse3 \
+            libfuse3-dev \
+            attr \
+            device-tree-compiler \
+            android-sdk-libsparse-utils \
+            openjdk-17-jdk
+
+          # Install legacy libtinfo5 required by older toolchains from a stable mirror
+          wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
           sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
           sudo apt-get install -f -y
+
+      - name: "Setting permission"
+        run: chmod +x build.sh
+
+      - name: "Build for specific device"
+        run: ./build.sh
