@@ -15,63 +15,27 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential \
-            bc \
-            bison \
-            flex \
-            make \
-            git \
-            curl \
-            wget \
-            cpio \
-            zip \
-            unzip \
-            rsync \
-            kmod \
-            pv \
-            lz4 \
-            xz-utils \
-            zlib1g-dev \
-            libssl-dev \
-            libelf-dev \
-            libncurses-dev \
-            libtool \
-            automake \
-            autoconf \
-            pkg-config \
-            uuid-dev \
-            liblz4-dev \
-            openssl \
-            python3 \
-            python-is-python3 \
-            python3-pip \
-            p7zip-full \
-            gcc \
-            g++ \
-            clang \
-            lld \
-            erofs-utils \
-            f2fs-tools \
-            fuse2fs \
-            fuse3 \
-            libfuse3-dev \
-            attr \
-            device-tree-compiler \
-            android-sdk-libsparse-utils \
-            openjdk-17-jdk
+            build-essential bc bison flex make git curl wget cpio zip unzip rsync kmod pv lz4 xz-utils \
+            zlib1g-dev libssl-dev libelf-dev libncurses-dev libtool automake autoconf pkg-config uuid-dev \
+            liblz4-dev openssl python3 python-is-python3 python3-pip p7zip-full gcc g++ clang lld \
+            erofs-utils f2fs-tools fuse2fs fuse3 libfuse3-dev attr device-tree-compiler android-sdk-libsparse-utils openjdk-17-jdk
 
-          # Install legacy libtinfo5 required by older toolchains
           wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2_amd64.deb
           sudo dpkg -i libtinfo5_6.3-2_amd64.deb
           sudo apt-get install -f -y
 
-      - name: "Clone Toolchain & KernelSU-Next"
+      - name: "Download Toolchain & Setup KernelSU-Next"
         run: |
-          # 1. Create directory and clone the correct Samsung-compatible GCC toolchain repository
+          # 1. Create target toolchain directory and download the Samsung CFP GCC toolchain archive
           mkdir -p toolchain/gcc-cfp/gcc-cfp-single
-          git clone --depth=1 https://github.com/ravindu644/gcc-cfp-jopp-only.git toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
+          wget -O gcc-cfp.tar.gz https://github.com/ravindu644/Android-Kernel-Tutorials/releases/download/toolchains/gcc-cfp-jopp-only.tar.gz
+          
+          # 2. Extract it directly into the expected path
+          tar -xvf gcc-cfp.tar.gz
+          # Adjust if the archive extracts to a folder name that needs moving, e.g.:
+          # mv gcc-cfp-jopp-only toolchain/gcc-cfp/gcc-cfp-single/aarch64-linux-android-4.9
 
-          # 2. Setup KernelSU-Next via official setup script
+          # 3. Setup KernelSU-Next via official setup script
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/main/kernel/setup.sh" | bash -s main
 
       - name: "Setting permission"
