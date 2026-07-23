@@ -36,18 +36,11 @@ jobs:
           mkdir -p toolchain/gcc-cfp/gcc-cfp-single
           mv gcc-cfp/gcc-cfp-jopp-only/aarch64-linux-android-4.9 toolchain/gcc-cfp/gcc-cfp-single/
 
-          # 4. Pull KernelSU-Next legacy files and map them correctly to drivers/kernelsu
-          rm -rf drivers/kernelsu KernelSU-Next-next
+          # 4. Clean up any previous partial setups to prevent recursive move errors
+          rm -rf KernelSU-Next drivers/kernelsu
+
+          # 5. Run the official setup script for the legacy branch
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s legacy
-          
-          # Handle directory naming discrepancy if it extracts to KernelSU-Next-next
-          if [ -d "KernelSU-Next-next/kernel" ]; then
-            mv KernelSU-Next-next/kernel drivers/kernelsu
-            rm -rf KernelSU-Next-next
-          elif [ -d "KernelSU-Next/kernel" ]; then
-            mv KernelSU-Next/kernel drivers/kernelsu
-            rm -rf KernelSU-Next
-          fi
 
       - name: "Setting permission"
         run: chmod +x build_kernel.sh
