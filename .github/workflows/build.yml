@@ -60,9 +60,9 @@ jobs:
             android-sdk-libsparse-utils \
             openjdk-17-jdk
 
-          # Install legacy libtinfo5 required by older toolchains from a stable mirror
-          wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
-          sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
+          # Fix: Use an active mirror path for libtinfo5 compatible with Ubuntu 24.04 runners
+          wget https://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2_amd64.deb
+          sudo dpkg -i libtinfo5_6.3-2_amd64.deb
           sudo apt-get install -f -y
 
       - name: "Setting permission"
